@@ -9,3 +9,6 @@ https://ocw.mit.edu/courses/6-s096-effective-programming-in-c-and-c-january-iap-
 
 MIT OCW Introduction to C++
 https://ocw.mit.edu/courses/6-096-introduction-to-c-january-iap-2011/pages/assignments/
+
+MIT OCW Foundations Of Software Engineering
+https://ocw.mit.edu/courses/1-124j-foundations-of-software-engineering-fall-2000/pages/assignments/
