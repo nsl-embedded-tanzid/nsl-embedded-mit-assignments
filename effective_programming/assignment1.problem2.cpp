@@ -93,7 +93,12 @@ int main()
         std::cout << "Answer Matched";
     else
         std::cout << "Answer Mismatched";
-
+    
+    delete matrix1;
+    delete matrix2;
+    delete result_matrix;
+    delete out_matrix;
+    
     fclose(input);
     fclose(output);
 }
