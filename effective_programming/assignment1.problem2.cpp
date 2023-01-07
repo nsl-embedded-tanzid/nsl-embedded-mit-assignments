@@ -1,95 +1,114 @@
 #include<iostream>
-#include<stdlib.h>
+#include<vector>
 
-class Matrix{    
+class Matrix{
     public:
-        int row, col;
-        int** index;
+        friend Matrix operator * (Matrix const& matrix1, Matrix const& matrix2);
+        friend int operator == (Matrix const& matrix1, Matrix const& matrix2);
 
-        Matrix(int row, int col){
-            this->row = row;
-            this->col = col;
-            this->index = (int**)malloc(sizeof(int*) * row);
+        Matrix(int no_row_, int no_col_) : no_row(no_row_), no_col(no_col_), data(no_row_){
+            for(int i = 0; i < no_row_; i++)
+                data[i].resize(no_col);
         }
-        
-        void create_matrix(){
-            for(int i=0; i < this->row; i++)
-                index[i] = (int*)malloc(sizeof(int) * this->col);
+
+        int get_data_index(int row, int col) const{ //returning the specific matrix index value
+            return data[row][col];
         }
+
+        void set_data_index(int row, int col, int value){ //replacing the specific matrix index with another value
+            data[row][col] = value;
+        }
+//        Matrix operator * (Matrix const& matrix1){
+//            Matrix res_matrix(no_row, matrix1.no_col);
+//            for(int i = 0; i < no_row; i++){
+//                for(int j = 0; j < matrix1.no_col; j++){
+//                    res_matrix.set_data_index(i, j, 0);
+//                    for(int k = 0; k < matrix1.no_row; k++){
+//                        int res = res_matrix.get_data_index(i, j);
+//                        res += get_data_index(i, k) * matrix1.get_data_index(k, j);
+//                        res_matrix.set_data_index(i, j, res);
+//                    }
+//                }
+//            }
+//            return res_matrix;
+//        }
+    private:
+        int no_row;
+        int no_col;
+        std::vector<std::vector<int>> data;
 };
 
-Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2){
+Matrix operator * (Matrix const& matrix1, Matrix const& matrix2){
 
-    Matrix ans_matrix(matrix1.row, matrix2.col);
-    ans_matrix.create_matrix();
+    Matrix res_matrix(matrix1.no_row, matrix2.no_col); // creating result matrix with row as matrix1 row and column as matrix2 column
 
-    for(int i=0; i<matrix1.row; i++){
-        for(int j=0; j<matrix2.col; j++){
-            ans_matrix.index[i][j] = 0;
-            for(int k=0; k<matrix2.row; k++)
-                ans_matrix.index[i][j] += (matrix1.index[i][k] * matrix2.index[k][j]);
+    for(int i = 0; i < matrix1.no_row; i++){
+        for(int j = 0; j < matrix2.no_col; j++){
+            int res = 0;
+            for(int k = 0; k < matrix2.no_row; k++){
+                res += (matrix1.get_data_index(i, k) * matrix2.get_data_index(k, j));
+            }
+            res_matrix.set_data_index(i, j, res);
         }
     }
-    return ans_matrix;
+    return res_matrix;
 }
 
-bool check_ans(Matrix matrix1, Matrix matrix2){
+int operator == (Matrix const& matrix1, Matrix const& matrix2){
 
-    if(matrix1.row != matrix2.row)  return false;
-    if(matrix1.col != matrix2.col)  return false;
-
-    for(int i=0; i<matrix1.row; i++){
-        for(int j=0; j<matrix1.col; j++){
-            if(matrix1.index[i][j] != matrix2.index[i][j])
-                return false;
+    if( (matrix1.no_row != matrix2.no_row) || (matrix1.no_col != matrix2.no_col))
+        return 0;
+    for(int i = 0; i < matrix1.no_row; i++){
+        for(int j = 0; j < matrix1.no_col; j++){
+            if( matrix1.get_data_index(i, j) != matrix2.get_data_index(i, j))
+                return 0;
         }
     }
-    return true;
+    return 1;
 }
 
 int main()
 {
-    FILE* input = fopen("assignment1.problem2_data/matrix.3.in","r");
-    FILE* output = fopen("assignment1.problem2_data/matrix.3.out","r");
+    FILE* input = fopen("assignment1.problem2_data/matrix.3.in","r");   // reading the matrix input file
+    FILE* output = fopen("assignment1.problem2_data/matrix.3.out","r"); // reading the actual result matrix file
 
     int row, col;
 
-    fscanf(input, "%d", &row);
-    fscanf(input, "%d", &col);
+    fscanf(input, "%d", &row);  // reading row for first matrix
+    fscanf(input, "%d", &col);  // reading column for first matrix
     
     Matrix matrix1(row, col);
-    matrix1.create_matrix();
+    // reading the first matrix values
     for(int i=0; i<row; i++){
         for(int j=0; j<col; j++){
             fscanf(input, "%d", &matrix1.index[i][j]);
         }
     }
 
-    fscanf(input, "%d", &row);
-    fscanf(input, "%d", &col);
+    fscanf(input, "%d", &row);  // reading row for second matrix
+    fscanf(input, "%d", &col);  // reading column for second matrix
 
     Matrix matrix2(row, col);
-    matrix2.create_matrix();
+    // reading the second matrix values
     for(int i=0; i<row; i++){
         for(int j=0; j<col; j++){
             fscanf(input, "%d", &matrix2.index[i][j]);
         }
     }
 
-    Matrix result_matrix = matrix_multiplication(matrix1, matrix2);
+    Matrix result_matrix = matrix1 * matrix2; // result_matrix is predicted result matrix
     
-    fscanf(output, "%d", &row);
-    fscanf(output, "%d", &col);
+    fscanf(output, "%d", &row); // reading the actual result matrix row
+    fscanf(output, "%d", &col); // reading the actual result matrix column
     
     Matrix out_matrix(row, col);
-    out_matrix.create_matrix();
-    
+    // reading the actual answer matrix values
     for(int i=0; i<row; i++){
         for(int j=0; j<col; j++)
             fscanf(output, "%d", &out_matrix.index[i][j]);
     }
 
-    if(check_ans(out_matrix, result_matrix))
+    if(out_matrix == result_matrix))
         std::cout << "Answer Matched";
     else
         std::cout << "Answer Mismatched";
