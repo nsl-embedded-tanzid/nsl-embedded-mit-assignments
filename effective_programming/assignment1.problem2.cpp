@@ -52,10 +52,12 @@ int operator == (Matrix const& matrix1, Matrix const& matrix2){
 
 int main()
 {
-    FILE* input = fopen("assignment1.problem2_data/matrix.3.in","r");   // reading the matrix input file
-    FILE* output = fopen("assignment1.problem2_data/matrix.3.out","r"); // reading the actual result matrix file
+    FILE* input = fopen("matrix.3.in","r");   // reading the matrix input file
+    FILE* output = fopen("matrix.3.out","r"); // reading the actual result matrix file
 
-    int row, col;
+    int row;
+    int col;
+    int input_value;
 
     fscanf(input, "%d", &row);  // reading row for first matrix
     fscanf(input, "%d", &col);  // reading column for first matrix
@@ -64,7 +66,8 @@ int main()
     // reading the first matrix values
     for(int i=0; i<row; i++){
         for(int j=0; j<col; j++){
-            fscanf(input, "%d", &matrix1.index[i][j]);
+            fscanf(input, "%d", &input_value);
+            matrix1.set_data_index(i, j, input_value);
         }
     }
 
@@ -75,7 +78,8 @@ int main()
     // reading the second matrix values
     for(int i=0; i<row; i++){
         for(int j=0; j<col; j++){
-            fscanf(input, "%d", &matrix2.index[i][j]);
+            fscanf(input, "%d", &input_value);
+            matrix2.set_data_index(i, j, input_value);
         }
     }
 
@@ -87,19 +91,16 @@ int main()
     Matrix out_matrix(row, col);
     // reading the actual answer matrix values
     for(int i=0; i<row; i++){
-        for(int j=0; j<col; j++)
-            fscanf(output, "%d", &out_matrix.index[i][j]);
+        for(int j=0; j<col; j++){
+            fscanf(output, "%d", &input_value);
+            out_matrix.set_data_index(i, j, input_value);
+        }
     }
 
-    if(out_matrix == result_matrix))
-        std::cout << "Answer Matched";
+    if(out_matrix == result_matrix)
+        std::cout << "Answer Matched\n";
     else
-        std::cout << "Answer Mismatched";
-    
-    delete matrix1;
-    delete matrix2;
-    delete result_matrix;
-    delete out_matrix;
+        std::cout << "Answer Mismatched\n";
     
     fclose(input);
     fclose(output);
