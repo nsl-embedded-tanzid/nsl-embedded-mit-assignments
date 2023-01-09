@@ -10,13 +10,14 @@ class Matrix{
             for(int i = 0; i < no_row_; i++)
                 data[i].resize(no_col);
         }
-
         int get_data_index(int row, int col) const{ //returning the specific matrix index value
             return data[row][col];
         }
-
         void set_data_index(int row, int col, int value){ //replacing the specific matrix index with another value
             data[row][col] = value;
+        }
+        ~Matrix(){
+            data.clear();
         }
     private:
         int no_row;
@@ -96,11 +97,7 @@ int main()
             out_matrix.set_data_index(i, j, input_value);
         }
     }
-
-    if(out_matrix == result_matrix)
-        std::cout << "Answer Matched\n";
-    else
-        std::cout << "Answer Mismatched\n";
+    std::cout << ((out_matrix == result_matrix)? "Answer Matched\n" : "Answer Mismatched");
     
     fclose(input);
     fclose(output);
