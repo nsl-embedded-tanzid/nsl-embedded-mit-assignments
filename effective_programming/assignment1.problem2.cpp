@@ -18,20 +18,6 @@ class Matrix{
         void set_data_index(int row, int col, int value){ //replacing the specific matrix index with another value
             data[row][col] = value;
         }
-//        Matrix operator * (Matrix const& matrix1){
-//            Matrix res_matrix(no_row, matrix1.no_col);
-//            for(int i = 0; i < no_row; i++){
-//                for(int j = 0; j < matrix1.no_col; j++){
-//                    res_matrix.set_data_index(i, j, 0);
-//                    for(int k = 0; k < matrix1.no_row; k++){
-//                        int res = res_matrix.get_data_index(i, j);
-//                        res += get_data_index(i, k) * matrix1.get_data_index(k, j);
-//                        res_matrix.set_data_index(i, j, res);
-//                    }
-//                }
-//            }
-//            return res_matrix;
-//        }
     private:
         int no_row;
         int no_col;
@@ -39,7 +25,7 @@ class Matrix{
 };
 
 Matrix operator * (Matrix const& matrix1, Matrix const& matrix2){
-
+    
     Matrix res_matrix(matrix1.no_row, matrix2.no_col); // creating result matrix with row as matrix1 row and column as matrix2 column
 
     for(int i = 0; i < matrix1.no_row; i++){
@@ -55,9 +41,6 @@ Matrix operator * (Matrix const& matrix1, Matrix const& matrix2){
 }
 
 int operator == (Matrix const& matrix1, Matrix const& matrix2){
-
-    if( (matrix1.no_row != matrix2.no_row) || (matrix1.no_col != matrix2.no_col))
-        return 0;
     for(int i = 0; i < matrix1.no_row; i++){
         for(int j = 0; j < matrix1.no_col; j++){
             if( matrix1.get_data_index(i, j) != matrix2.get_data_index(i, j))
