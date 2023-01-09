@@ -19,6 +19,7 @@ union float_bits{
 };
 typedef union float_bits FLOAT;
 
+// the function will represent floating values in to binaries
 void check_float(float x){
     FLOAT check;
     check.f = x;
@@ -47,10 +48,10 @@ std::string floating_point(float value){
     exponent_bits = (new_float_bits.f_bit >> MANTISSA_LENGTH) & EXPONENT_MASK;
     sign_bit = new_float_bits.f_bit & SIGN_MASK;
 
-    std::ostringstream str_stream;
+    std::ostringstream str_stream; //string stream to hold the floating point representation
     std::string ret_str;
 
-    if(sign_bit == 1)
+    if(sign_bit == 1) // check whether the number is positive or negative
         str_stream << "-";
 
     if(exponent_bits == 0){
@@ -79,23 +80,23 @@ std::string floating_point(float value){
 
 int main(){
 
-    FILE* input = fopen("problem1_data/floating.2.in","r");
-    std::ifstream output("problem1_data/floating.2.out");
+    FILE* input = fopen("problem1_data/floating.2.in","r"); // reading the values of input floating numbers
+    std::ifstream output("problem1_data/floating.2.out");   // reading the values of actual representation of the floating numbers
     int n;
     float f;
     std::string check1;
     std::string check2;
 
-    fscanf(input,"%d",&n);
+    fscanf(input,"%d",&n); // read total number of inputs
 
     for(int i=0; i<n; i++){
-        fscanf(input,"%f", &f);
-        check_float(f);
+        fscanf(input,"%f", &f); // read floating numbers
+        check_float(f); // represent floating number into binary
 
-        std::getline(output, check1);
-        check2 = floating_point(f);
+        std::getline(output, check1); // read actual answer
+        check2 = floating_point(f); // get predicted answer
 
-        if(check1 == check2)
+        if(check1 == check2) // check whether actual answer and predicted answer is the same
             std::cout << "Output Matched\n\n";
         else
             std::cout << "Output Mismatched\n\n";
